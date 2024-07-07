@@ -1,9 +1,9 @@
-import React from 'react'
+import { Button } from '../../components/ui/button';
 
 const SignUpForm = () => {
   return (
-    <div>SignUpForm</div>
+    <Button>Click Me</Button>
   )
 }
 
-export default SignUpForm
+export default SignUpForm;
