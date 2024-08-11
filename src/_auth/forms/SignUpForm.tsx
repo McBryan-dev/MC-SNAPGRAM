@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from 'react-router-dom'
 
 import { z } from 'zod';
 
@@ -21,8 +22,6 @@ import { Button } from '../../components/ui/button';
 import { useForm } from 'react-hook-form';   
 
 
-
-
 //  SIGNUP FORM
  const SignUpForm = () => {
 
@@ -38,8 +37,8 @@ import { useForm } from 'react-hook-form';
     },
   })
   
-  function onSubmit(values: z.infer<typeof SignupValidation>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof SignupValidation>) {
+      // const newUser = await createUserAccount(values);
   }
   
   return (
@@ -127,7 +126,10 @@ import { useForm } from 'react-hook-form';
             ) : "Submit"}
           </Button>
 
-              <p className="text-small-regular text-light-2 text-center mt-2"></p>
+              <p className="text-small-regular text-light-2 text-center mt-2">
+                ALREADY HAVE AN ACCOUNT? 
+                <Link to="/sign-in" className="text-primary-500 text-small-semibold ml-1">Login</Link>
+              </p>
 
         </form>
       </div>
