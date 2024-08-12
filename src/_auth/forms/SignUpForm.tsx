@@ -16,6 +16,7 @@ import {
 import { SignupValidation } from '../../lib/validation/index.ts';
 import { Input } from "@/components/ui/input";
 import Loader from '@/components/shared/Loader';
+import { createUserAccount } from "@/lib/appwrite/api"
 
  
 import { Button } from '../../components/ui/button';
@@ -23,7 +24,7 @@ import { useForm } from 'react-hook-form';
 
 
 //  SIGNUP FORM
- const SignUpForm = () => {
+const SignUpForm = () => {
 
   const isLoading = false;
   
@@ -38,7 +39,11 @@ import { useForm } from 'react-hook-form';
   })
   
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
-      // const newUser = await createUserAccount(values);
+    const newUser = await createUserAccount(values);
+
+    if(!newUser) {
+      return;
+    }
   }
   
   return (
@@ -96,7 +101,7 @@ import { useForm } from 'react-hook-form';
               <FormItem>
                 <FormLabel>EMAIL</FormLabel>
                 <FormControl>
-                  <Input type="text" className="shad-input" {...field} />
+                  <Input type="email" className="shad-input" {...field} />
                 </FormControl>
                 
                 <FormMessage />
@@ -111,7 +116,7 @@ import { useForm } from 'react-hook-form';
               <FormItem>
                 <FormLabel>PASSWORD</FormLabel>
                 <FormControl>
-                  <Input type="text" className="shad-input" {...field} />
+                  <Input type="password" className="shad-input" {...field} />
                 </FormControl>
                 
                 <FormMessage />
