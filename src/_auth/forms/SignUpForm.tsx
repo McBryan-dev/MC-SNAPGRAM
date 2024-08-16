@@ -23,6 +23,7 @@ import { Button } from '../../components/ui/button';
 import { useToast } from "@/components/ui/use-toast";
 import { useForm } from 'react-hook-form';   
 import { useCreateUserAccount } from '@/lib/react-query/queriesAndMutations.ts';
+import { useSignInAccount } from '@/lib/react-query/queriesAndMutations.ts';
 
 
 //  SIGNUP FORM
@@ -30,7 +31,11 @@ const SignUpForm = () => {
 
   const { toast } = useToast();
 
-  const {mutateAsync: createUserAccount, isLoading: isCreatingUser} = useCreateUserAccount();
+  const {mutateAsync: createUserAccount, isLoading:
+   isCreatingUser} = useCreateUserAccount();
+
+  const {mutateAsync: signInAccount, isLoading: isSigningIn} = 
+  useSignInAccount();
   
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -51,7 +56,14 @@ const SignUpForm = () => {
       })
     }
 
-    // const session = await signInAccount();
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password
+    });
+
+    if(!session) {
+      return toast({title: "SignIn Failed. Plesae try again."})
+    }
 
 
 
