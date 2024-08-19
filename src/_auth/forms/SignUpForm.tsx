@@ -30,12 +30,12 @@ const SignUpForm = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
-  const {checkAuthUser, isLoading: isUserLoading} = useUserContext();
+  const {checkAuthUser, isPending: isUserLoading} = useUserContext();
 
-  const {mutateAsync: createUserAccount, isLoading:
+  const {mutateAsync: createUserAccount, isPending:
    isCreatingAccount} = useCreateUserAccount();
 
-  const {mutateAsync: signInAccount, isLoading: isSigningIn} = 
+  const {mutateAsync: signInAccount, isPending: isSigningIn} = 
   useSignInAccount();
   
   const form = useForm<z.infer<typeof SignupValidation>>({

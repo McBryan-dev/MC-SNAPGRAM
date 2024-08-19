@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/lib/appwrite/api';
-import { IContextType, IUser } from '@/types';
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import { IContextType, IUser } from '@/types/index';
+import {createContext, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const INITIAL_USER = {
@@ -8,17 +8,17 @@ export const INITIAL_USER = {
     name: '',
     username: '',
     email: '',
-    iamgeUrl: '',
+    imageUrl: '',
     bio: ''
-}
+};
 
 const INITIAL_STATE = {
     user: INITIAL_USER,
-    isLodaading: false,
+    isLoading: false,
     isAuthenticated: false,
     setUser: () => {},
-    setisAuthenticated: () => {},
-    checkAuthUser: async () => false as boolean
+    setIsAuthenticated: () => {},
+    checkAuthUser: async () => false as boolean,
 }
 
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
@@ -59,9 +59,9 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     useEffect(() => {
+        // localStorage.getItem('cookieFallback') === null
         if(
-            localStorage.getItem('cookieFallback') === '[]' ||
-            localStorage.getItem('cookieFallback') === null
+            localStorage.getItem('cookieFallback') === '[]'
         ) navigate('/sign-in')
 
         checkAuthUser();
