@@ -1,5 +1,5 @@
-import { getCurrentUser } from '@/lib/appwrite/api';
-import { IContextType, IUser } from '@/types/index';
+import { getCurrentUser } from '@/lib/appwrite/api.ts';
+import { IUser } from '@/types/index';
 import {createContext, useContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,17 +12,29 @@ export const INITIAL_USER = {
     bio: ''
 };
 
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
     user: INITIAL_USER,
     isLoading: false,
     isAuthenticated: false,
     setUser: () => {},
     setIsAuthenticated: () => {},
-    checkAuthUser: async () => false as boolean,
+    checkAuthUser: async() => false as boolean,
 }
 
-const AuthContext = createContext<IContextType>(INITIAL_STATE);
+export type IContextType = {
+    user: IUser;
+    isLoading: boolean;
+    setUser: React.Dispatch<React.SetStateAction<IUser>>;
+    isAuthenticated: boolean;
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+    checkAuthUser: () => Promise<boolean>;
+  };
 
+export const AuthContext = createContext<IContextType>(INITIAL_STATE);
+
+export const useUserContext = () => {
+    return useContext(AuthContext)
+}
 const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
     const [user, setUser] = useState<IUser>(INITIAL_USER);
@@ -31,6 +43,7 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const navigate = useNavigate();
 
     const checkAuthUser = async() => {
+        setIsLoading(true)
         try {
             const currentAccount = await getCurrentUser();
 
@@ -60,12 +73,15 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
     useEffect(() => {
         // localStorage.getItem('cookieFallback') === null
+        // navigate('/sign-in')
         if(
             localStorage.getItem('cookieFallback') === '[]'
-        ) navigate('/sign-in')
-
+        ) 
+            
         checkAuthUser();
     }, [])
+
+    
 
     const value = {
         user,
@@ -85,7 +101,3 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
 
 export default AuthProvider;
-
-export const useUserContext = () => {
-    useContext(AuthContext)
-}

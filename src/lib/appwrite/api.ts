@@ -1,7 +1,6 @@
 import { INewUser } from "@/types";
 import { account, appwriteConfig, avatars, databases } from "./config" 
-import { ID } from 'appwrite'
-import Query from '@tanstack/react-query'
+import { ID, Query } from 'appwrite'
 
 export async function createUserAccount(user: INewUser) {
     try {
@@ -21,8 +20,11 @@ export async function createUserAccount(user: INewUser) {
             accountId: newAccount.$id,
             name: newAccount.name,
             email: newAccount.email,
-            username: newAccount.user
-        })
+            username: user.username,
+            imageUrl: avatarUrl,
+        });
+
+        return newUser;
     } catch (error) {
         console.log(error);
         return error;
@@ -70,7 +72,7 @@ export async function getCurrentUser() {
         const currentUser = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.userCollectionId,
-            [Query.equal('accountId', currentAccount.$id)]
+            [Query.equal ('accountId', currentAccount.$id)]
         )
 
         if(!currentUser) throw Error;
