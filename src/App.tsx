@@ -7,6 +7,15 @@ import SignUpForm from './_auth/forms/SignUpForm';
 import { Home } from './_root/pages';
 import AuthLayout from './_auth/AuthLayout';
 import RootLayout from './_root/RootLayout';
+import { Explore } from './_root/pages';
+import { Saved } from './_root/pages';
+import { AllUsers } from './_root/pages';
+import { CreatePost } from './_root/pages';
+import { EditPost } from './_root/pages';
+import { PostDetails } from './_root/pages';
+import { Profile } from './_root/pages';
+import { UpdateProfile } from './_root/pages';
+import { LikedPosts } from './_root/pages';
 
 import { Toaster } from "@/components/ui/toaster";
 
@@ -28,7 +37,15 @@ const App = () => {
                 {/* Private routes */}
                 <Route element={<RootLayout />}>
                     <Route index element={<Home />} />
-
+                    <Route path="/explore" element={<Explore />} />
+                    <Route path="/saved" element={<Saved />} />
+                    <Route path="/all-users" element={<AllUsers />} />
+                    <Route path="/create-post" element={<CreatePost />} />
+                    <Route path="/update-post/:id" element={<EditPost />} />
+                    <Route path="/posts/:id" element={<PostDetails />} />
+                    <Route path="/profile/:id/*" element={<Profile />} />
+                    <Route path="/update-profile/:id" element={<UpdateProfile />} />
+                    <Route path="/liked-posts" element={<LikedPosts />} />
                 </Route>
 
             </Routes>

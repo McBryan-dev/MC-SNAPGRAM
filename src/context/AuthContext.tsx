@@ -12,7 +12,7 @@ export const INITIAL_USER = {
     bio: ''
 };
 
-export const INITIAL_STATE = {
+const INITIAL_STATE = {
     user: INITIAL_USER,
     isLoading: false,
     isAuthenticated: false,
@@ -21,6 +21,7 @@ export const INITIAL_STATE = {
     checkAuthUser: async() => false as boolean,
 }
 
+
 export type IContextType = {
     user: IUser;
     isLoading: boolean;
@@ -28,13 +29,10 @@ export type IContextType = {
     isAuthenticated: boolean;
     setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
     checkAuthUser: () => Promise<boolean>;
-  };
+};
 
-export const AuthContext = createContext<IContextType>(INITIAL_STATE);
+const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
-export const useUserContext = () => {
-    return useContext(AuthContext)
-}
 const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
     const [user, setUser] = useState<IUser>(INITIAL_USER);
@@ -72,14 +70,13 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     useEffect(() => {
-        // localStorage.getItem('cookieFallback') === null
-        // navigate('/sign-in')
         if(
+            localStorage.getItem ('cookieFallback') === null ||
             localStorage.getItem('cookieFallback') === '[]'
-        ) 
+        ) navigate('/sign-in')
             
         checkAuthUser();
-    }, [])
+    }, []);
 
     
 
@@ -99,5 +96,6 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
     )
 }
 
-
 export default AuthProvider;
+
+export const useUserContext = () => useContext(AuthContext)

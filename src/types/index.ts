@@ -8,10 +8,10 @@ export type IContextType = {
 }
 
 export type INavLink = {
-    imgURL: string;
-    route: string;
-    label: string;
-  };
+  imgURL: string;
+  route: string;
+  label: string;
+};
   
   export type IUpdateUser = {
     userId: string;

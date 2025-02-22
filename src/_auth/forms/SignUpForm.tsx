@@ -15,6 +15,7 @@ import {
 import { SignupValidation } from '../../lib/validation/index.ts';
 import { Input } from "@/components/ui/input";
 import Loader from '@/components/shared/Loader';
+import { createUserAccount } from '@/lib/appwrite/api'
  
 import { Button } from '../../components/ui/button';
 import { useToast } from "@/components/ui/use-toast";
@@ -29,15 +30,45 @@ import { useUserContext } from '@/context/AuthContext.tsx';
 const SignUpForm = () => {
   
   const { toast } = useToast();
+  const {checkAuthUser, isLoading: isUserLoading} = useUserContext()
   const navigate = useNavigate();
+
+  const {mutateAsync: createUserAccount, isPending:
+  isCreatingAccount} = useCreateUserAccount();
+ 
+  const {mutateAsync: signInAccount, isPending: isSigningIn} = 
+  useSignInAccount();
+
+  //ON SUBMIT
   
-  const { checkAuthUser, isPending: isUserLoading} = useUserContext();
-   
-    const {mutateAsync: createUserAccount, isPending:
-     isCreatingAccount} = useCreateUserAccount();
-  
-    const {mutateAsync: signInAccount, isPending: isSigningIn} = 
-    useSignInAccount();
+  async function onSubmit(values: z.infer<typeof SignupValidation>) {
+    const newUser = await createUserAccount(values);
+
+    if(!newUser) {
+      return toast({title: "SIGN UP FAILED. PLEASE TRY AGAIN."})
+    }
+
+    const session = await signInAccount({ 
+      email: values.email,
+      password: values.password
+    });
+
+    if(!session) {
+      return toast({title: "Sign In Failed. Plesae try again."})
+    }
+
+    const isLoggedIn = await checkAuthUser();
+
+    if(isLoggedIn) {
+      form.reset()
+
+      navigate('/')
+    } else {
+      return toast({title: 'SIGN UP FAILED. PLEASE TRY AGAIN. '})
+    }
+
+      
+  }
     
     const form = useForm<z.infer<typeof SignupValidation>>({
       resolver: zodResolver(SignupValidation),
@@ -49,36 +80,6 @@ const SignUpForm = () => {
       },
     })
     
-    async function onSubmit(values: z.infer<typeof SignupValidation>) {
-      const newUser = await createUserAccount(values);
-  
-      if(!newUser) {
-        return toast({
-          title: "SIGN UP FAILED. PLEASE TRY AGAIN",
-        })
-      }
-  
-      const session = await signInAccount({
-        email: values.email,
-        password: values.password
-      });
-  
-      if(!session) {
-        return toast({title: "SignIn Failed. Plesae try again."})
-      }
-  
-      const isLoggedIn = await checkAuthUser();
-  
-      if(isLoggedIn) {
-        form.reset()
-  
-        navigate('/')
-      } else {
-        return toast({title: 'SIGN UP FAILED. PLEASE TRY AGAIN. '})
-      }
-
-        
-    } 
     
     return (
       <Form {...form}>
@@ -162,7 +163,7 @@ const SignUpForm = () => {
                 <div className="flex flex-centre gap-2">
                   <Loader />Loading...
                 </div>
-              ) : "Submit"}
+              ) : "SIGN UP"}
             </Button>
   
                 <p className="text-small-regular text-light-2 text-center mt-2">
