@@ -4,8 +4,8 @@ import {useUserContext} from '@/context/AuthContext'
 import {Link} from 'react-router-dom';
 import PostStats from '@/components/shared/PostStats.tsx';
 
-type GridPostsListProps = {
-    posts: Models.Documents[];
+type GridPostListProps = {
+    posts: Models.Document[];
     showUser?: boolean;
     showStats?: boolean;
 }
