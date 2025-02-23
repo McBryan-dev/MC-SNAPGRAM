@@ -1,4 +1,3 @@
-import React from 'react';
 import {Models} from 'appwrite';
 import Loader from '@/components/shared/Loader.tsx'
 import GridPostList from './GridPostList.tsx'
